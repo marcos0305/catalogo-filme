@@ -1,0 +1,38 @@
+<div class="catalogo-container">
+  <h1>Catálogo de Filmes</h1>
+  <div class="search-bar">
+    <input
+      type="text"
+      [(ngModel)]="query"
+      placeholder="Pesquisar por nome ou gênero..."
+    />
+    <button (click)="buscarFilmes()">Buscar</button>
+  </div>
+
+  <div class="filters">
+    <div>
+      <label for="genero">Filtrar por Gênero:</label>
+      <select id="genero" [(ngModel)]="genero" (change)="filtrarFilmes()">
+        <option value="">Todos</option>
+        <option value="Ação">Ação</option>
+        <option value="Comédia">Comédia</option>
+        <option value="Drama">Drama</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="filmes-list" *ngIf="filmes$ | async as filmes">
+    <div *ngIf="filmes.length === 0; else filmesList">
+      <p>Nenhum filme encontrado.</p>
+    </div>
+    <ng-template #filmesList>
+      <div *ngFor="let filme of filmes" class="filme-card">
+        <img [src]="filme.imageUrl || 'https://via.placeholder.com/150'" alt="{{ filme.titulo }}" />
+        <h3>{{ filme.titulo }}</h3>
+        <p>Gênero: {{ filme.genero }}</p>
+        <p>Classificação: {{ filme.classificacao }}</p>
+      </div>
+
+    </ng-template>
+  </div>
+</div>
