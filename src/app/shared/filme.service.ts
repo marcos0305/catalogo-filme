@@ -1,5 +1,6 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { first, Observable, of } from 'rxjs';
 
 export interface Filme {
   id?: string;
@@ -14,73 +15,30 @@ export interface Filme {
 }
 
 @Injectable({
+
   providedIn: 'root'
 })
 export class FilmeService {
   private filmes: Filme[] = [];
+  private readonly API = 'api/filmes';
 
-  constructor() {
-    this.filmes = [
-      {
-        id: '1',
-        titulo: 'Filme 1',
-        sinopse: 'Uma aventura épica...',
-        elenco: 'Ator 1, Ator 2',
-        diretor: 'Diretor 1',
-        duracao: '120 min',
-        classificacao: '12',
-        genero: 'Ação',
-        imageUrl: 'https://a.ltrbxd.com/resized/film-poster/1/1/1/6/6/0/0/1116600-sinners-2025-0-1000-0-1500-crop.jpg?v=00ce32e0ba'
-      },
-      {
-        id: '2',
-        titulo: 'Filme 2',
-        sinopse: 'Uma comédia romântica...',
-        elenco: 'Ator 3, Ator 4',
-        diretor: 'Diretor 2',
-        duracao: '90 min',
-        classificacao: '14',
-        genero: 'Comédia',
-        imageUrl: 'https://a.ltrbxd.com/resized/film-poster/1/1/6/2/6/3/4/1162634-the-wedding-banquet-2025-0-1000-0-1500-crop.jpg?v=f6f4ead7d2'
-      },
-      {
-        id: '2',
-        titulo: 'Filme 2',
-        sinopse: 'Uma comédia romântica...',
-        elenco: 'Ator 3, Ator 4',
-        diretor: 'Diretor 2',
-        duracao: '90 min',
-        classificacao: '14',
-        genero: 'Drama',
-        imageUrl: 'https://a.ltrbxd.com/resized/film-poster/1/1/1/6/6/0/0/1116600-sinners-2025-0-1000-0-1500-crop.jpg?v=00ce32e0ba'
-      }
-    ];
-    this.loadFromLocalStorage();
+  constructor(private readonly httpClient: HttpClient) {
+   this.buscarFimes().subscribe((f) => this.filmes = f)
   }
 
-  private loadFromLocalStorage(): void {
-    const savedFilmes = localStorage.getItem('filmes');
-    if (savedFilmes) {
-      try {
-        const parsedFilmes = JSON.parse(savedFilmes);
-        if (Array.isArray(parsedFilmes)) {
-          this.filmes = parsedFilmes.filter((filme: any) =>
-            filme.titulo && filme.genero && filme.duracao
-          );
-        }
-      } catch (error) {
-        console.error('Erro ao carregar filmes do localStorage:', error);
-      }
-    }
+  buscarFimes(): Observable<Filme[]> {
+    return this.httpClient.get<Filme[]> (this.API).pipe(
+      first()
+    );
   }
 
-  private saveToLocalStorage(): void {
-    try {
-      localStorage.setItem('filmes', JSON.stringify(this.filmes));
-    } catch (error) {
-      console.error('Erro ao salvar filmes no localStorage:', error);
-    }
+  buscarFilmePorId(id: number): Observable<Filme> {
+    return this.httpClient.get<Filme> (`${this.API}/${id}`).pipe(
+      first()
+    );
   }
+
+
 
   getFilmes(): Observable<Filme[]> {
     return of(this.filmes);
