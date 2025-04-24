@@ -75,11 +75,17 @@ export class FilmeService {
     }
     if (query.trim()) {
       const lowerQuery = query.toLowerCase();
+
       filteredFilmes = filteredFilmes.filter(filme =>
         filme.titulo.toLowerCase().includes(lowerQuery) ||
         filme.genero.toLowerCase().includes(lowerQuery)
       );
     }
+
+    if(genero){
+      filteredFilmes = filteredFilmes.filter(filme => filme.genero.toLowerCase() === genero.toLowerCase());
+    }
+
     return of(filteredFilmes);
   }
 }

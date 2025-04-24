@@ -1,24 +1,23 @@
 <div class="catalogo-container">
-  <h1>Catálogo de Filmes</h1>
+  <h1 class="titulo-catalogo">🎬 Catálogo de Filmes</h1>
   <div class="search-bar">
     <input
-      type="text"
-      [(ngModel)]="query"
+      type="text" [(ngModel)]="query"
+      (ngModelChange)="buscarFilmes()"
       placeholder="Pesquisar por nome ou gênero..."
-    />
-    <button (click)="buscarFilmes()">Buscar</button>
-  </div>
+      (keyup.enter)="buscarFilmes()"
+      />
 
-  <div class="filters">
-    <div>
-      <label for="genero">Filtrar por Gênero:</label>
-      <select id="genero" [(ngModel)]="genero" (change)="filtrarFilmes()">
-        <option value="">Todos</option>
-        <option value="Ação">Ação</option>
-        <option value="Comédia">Comédia</option>
-        <option value="Drama">Drama</option>
-      </select>
-    </div>
+
+    <select id="genero" [(ngModel)]="genero" (change)="filtrarFilmes()">
+      <option value="">Todos</option>
+      <option value="Ação">Ação</option>
+      <option value="Comédia">Comédia</option>
+      <option value="Drama">Drama</option>
+    </select>
+
+    <button (click)="buscarFilmes()">Buscar</button>
+
   </div>
 
   <div class="filmes-list" *ngIf="filmes$ | async as filmes">
@@ -28,13 +27,9 @@
     <ng-template #filmesList>
       <div *ngFor="let filme of filmes" class="filme-card">
         <a [routerLink]="['/catalogo', filme.id]">
-          <img [src]="filme.imageUrl || 'https://via.placeholder.com/150'" alt="{{ filme.titulo }}" />
-          <h3>{{ filme.titulo }}</h3>
+          <img [src]="filme.imageUrl" alt="{{ filme.titulo }}" />
         </a>
-          <p>Gênero: {{ filme.genero }}</p>
-          <p>Classificação: {{ filme.classificacao }}</p>
-          <p>Diretor: {{ filme.diretor }}</p>
-
+        <h3>{{ filme.titulo }}</h3>
       </div>
     </ng-template>
 

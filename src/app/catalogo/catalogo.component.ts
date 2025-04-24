@@ -15,11 +15,16 @@ import { RouterModule } from '@angular/router';
   styleUrls: ['./catalogo.component.css']
 })
 export class CatalogoComponent implements OnInit, OnDestroy {
+menuAberto: any;
+abrirMenu() {
+throw new Error('Method not implemented.');
+}
   filmes$: Observable<Filme[]>;
   query: string = '';
   genero: string = '';
 
   constructor(private filmeService: FilmeService){
+      this.filmeService.getFilmes(),
       this.filmes$ = filmeService.buscarFimes();
       this.filmes$.subscribe((f) => console.log(f))
     }
@@ -43,7 +48,6 @@ export class CatalogoComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-
-  }
+}
 
 }
