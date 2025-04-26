@@ -23,7 +23,10 @@ export class FilmeService {
   private readonly API = 'api/filmes';
 
   constructor(private readonly httpClient: HttpClient) {
-   this.buscarFimes().subscribe((f) => this.filmes = f)
+   this.buscarFimes().subscribe({
+    next: (f) => this.filmes = f,
+    error: (e) => console.error('Error ao buscar filmes:', e)
+   })
   }
 
   buscarFimes(): Observable<Filme[]> {

@@ -24,7 +24,6 @@ throw new Error('Method not implemented.');
   genero: string = '';
 
   constructor(private filmeService: FilmeService){
-      this.filmeService.getFilmes(),
       this.filmes$ = filmeService.buscarFimes();
       this.filmes$.subscribe((f) => console.log(f))
     }
