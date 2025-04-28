@@ -1,12 +1,17 @@
-<div *ngIf="filme$ | async as filme">
-  <h2>{{ filme.titulo }}</h2>
-  <img [src]="filme.imageUrl || 'https://via.placeholder.com/200'" alt="{{ filme.titulo }}" />
-  <p>Sinopse: {{ filme.sinopse }}</p>
-  <p>Elenco: {{ filme.elenco }}</p>
-  <p>Diretor: {{ filme.diretor }}</p>
-  <p>Duração: {{ filme.duracao }}</p>
-  <p>Gênero: {{ filme.genero }}</p>
-  <p>Classificação: {{ filme.classificacao }}</p>
-  <button (click)="voltar()">← Voltar</button>
-</div>
+<div *ngIf="filme$ | async as filme" class="detalhe-filme-container">
+  <div class="filme-card">
+    <img [src]="filme.imageUrl || 'https://via.placeholder.com/300x450'" alt="{{ filme.titulo }}" class="filme-poster" />
 
+    <div class="filme-info">
+      <h2>{{ filme.titulo }}</h2>
+      <p><strong>Sinopse:</strong> {{ filme.sinopse }}</p>
+      <p><strong>Elenco:</strong> {{ filme.elenco }}</p>
+      <p><strong>Diretor:</strong> {{ filme.diretor }}</p>
+      <p><strong>Duração:</strong> {{ filme.duracao }}</p>
+      <p><strong>Gênero:</strong> {{ filme.genero }}</p>
+      <p><strong>Classificação:</strong> {{ filme.classificacao }}</p>
+
+      <button class="voltar-button" (click)="voltar()">← Voltar</button>
+    </div>
+  </div>
+</div>

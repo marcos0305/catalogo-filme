@@ -1,0 +1,45 @@
+.detalhe-filme-container {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.filme-card {
+  display: flex;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  max-width: 800px;
+  overflow: hidden;
+}
+
+.filme-poster {
+  width: 300px;
+  object-fit: cover;
+}
+
+.filme-info {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.filme-info h2 {
+  margin-top: 0;
+}
+
+.voltar-button {
+  margin-top: auto;
+  padding: 0.8rem 1.2rem;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.voltar-button:hover {
+  background-color: #2980b9;
+}

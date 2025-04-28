@@ -11,6 +11,7 @@ import { switchMap } from 'rxjs/operators';
   standalone: true,
   imports: [CommonModule],
   templateUrl: '../detalhe-filme/detalhe-filme.component.html',
+  styleUrls: ['./detalhe-filme.component.css'],
   styles: [`img { max-width: 300px; }`]
 })
 export class DetalheFilmeComponent implements OnInit {
