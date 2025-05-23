@@ -4,13 +4,13 @@ import { Observable} from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
+import { RouterLink, RouterModule } from '@angular/router';
 
 
 @Component({
   selector: 'app-catalogo',
   standalone: true,
-  imports: [FormsModule, CommonModule, HttpClientModule, RouterModule],
+  imports: [FormsModule, CommonModule, HttpClientModule, RouterModule, RouterLink],
   templateUrl: './catalogo.component.html',
   styleUrls: ['./catalogo.component.css']
 })

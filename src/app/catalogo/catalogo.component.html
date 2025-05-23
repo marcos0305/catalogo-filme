@@ -25,12 +25,16 @@
       <p>Nenhum filme encontrado.</p>
     </div>
     <ng-template #filmesList>
+
+
       <div *ngFor="let filme of filmes" class="filme-card">
         <a [routerLink]="['/catalogo', filme.id]">
           <img [src]="filme.imageUrl" alt="{{ filme.titulo }}" />
         </a>
         <h3>{{ filme.titulo }}</h3>
       </div>
+
+
     </ng-template>
 
   </div>

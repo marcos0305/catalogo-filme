@@ -19,6 +19,9 @@ export interface Filme {
   providedIn: 'root'
 })
 export class FilmeService {
+  getFilme(arg0: any) {
+    throw new Error('Method not implemented.');
+  }
   private filmes: Filme[] = [];
   private readonly API = 'api/filmes';
 
