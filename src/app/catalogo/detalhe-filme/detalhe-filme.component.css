@@ -1,45 +1,100 @@
 .detalhe-filme-container {
-  display: flex;
-  justify-content: center;
-  padding: 2rem;
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 0 15px;
 }
 
 .filme-card {
-  display: flex;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  max-width: 800px;
-  overflow: hidden;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 20px;
 }
 
-.filme-poster {
-  width: 300px;
-  object-fit: cover;
+.trailer-container {
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.trailer-container h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+iframe {
+  width: 100%; /* Faz o iframe ocupar toda a largura do container pai */
+  height: auto;
+  aspect-ratio: 16 / 9; /* Mantém a proporção 16:9 do vídeo */
+  border: none;
+  border-radius: 5px;
+  display: block; /* Remove espaços indesejados abaixo do iframe */
+}
+
+.no-trailer {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  margin-bottom: 20px;
 }
 
 .filme-info {
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
+  text-align: left;
 }
 
 .filme-info h2 {
-  margin-top: 0;
+  font-size: 2rem;
+  margin-bottom: 15px;
+  color: #222;
+}
+
+.filme-info p {
+  margin: 8px 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #444;
+}
+
+.filme-info p strong {
+  color: #333;
 }
 
 .voltar-button {
-  margin-top: auto;
-  padding: 0.8rem 1.2rem;
-  background-color: #3498db;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 5px;
   cursor: pointer;
-  transition: background 0.3s;
+  font-size: 1rem;
+  transition: background-color 0.3s;
 }
 
 .voltar-button:hover {
-  background-color: #2980b9;
+  background-color: #0056b3;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+  .detalhe-filme-container {
+    padding: 0 10px;
+  }
+
+  .filme-card {
+    padding: 15px;
+  }
+
+  .filme-info h2 {
+    font-size: 1.5rem;
+  }
+
+  .trailer-container h3 {
+    font-size: 1.2rem;
+  }
+
+  iframe {
+    width: 100%;
+  }
 }

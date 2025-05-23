@@ -4,12 +4,12 @@ import { FilmeService, Filme } from '../../shared/filme.service';
 import { CommonModule, Location } from '@angular/common';
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-
+import { SafeUrlPipe } from '../../Links/safe-url.pipe';
 
 @Component({
   selector: 'app-detalhe-filme',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,SafeUrlPipe],
   templateUrl: '../detalhe-filme/detalhe-filme.component.html',
   styleUrls: ['./detalhe-filme.component.css'],
   styles: [`img { max-width: 300px; }`]
@@ -30,7 +30,6 @@ export class DetalheFilmeComponent implements OnInit {
       })
     );
   }
-
   voltar(): void{
     this.location.back();
   }

@@ -1,7 +1,15 @@
 <div *ngIf="filme$ | async as filme" class="detalhe-filme-container">
-  <div class="filme-card">
-    <img [src]="filme.imageUrl || 'https://via.placeholder.com/300x450'" alt="{{ filme.titulo }}" class="filme-poster" />
-
+<div class="filme-card">
+        @if(filme.trailerUrl) {
+          <iframe
+            [src]="filme.trailerUrl | safeUrl"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        } @else {
+          <p>Nenhum trailer disponível.</p>
+        }
     <div class="filme-info">
       <h2>{{ filme.titulo }}</h2>
       <p><strong>Sinopse:</strong> {{ filme.sinopse }}</p>
@@ -10,7 +18,7 @@
       <p><strong>Duração:</strong> {{ filme.duracao }}</p>
       <p><strong>Gênero:</strong> {{ filme.genero }}</p>
       <p><strong>Classificação:</strong> {{ filme.classificacao }}</p>
-      
+
       <button class="voltar-button" (click)="voltar()">← Voltar</button>
     </div>
   </div>

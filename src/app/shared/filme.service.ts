@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { first, Observable, of } from 'rxjs';
 
 export interface Filme {
+trailerUrl: any;
   id?: string;
   titulo: string;
   sinopse: string;
