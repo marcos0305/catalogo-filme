@@ -33,4 +33,19 @@ export class DetalheFilmeComponent implements OnInit {
   voltar(): void{
     this.location.back();
   }
+
+  curtirFilme(id: number | undefined): void {
+    if (id !== undefined) {
+      this.filmeService.curtirFilme(id).subscribe({
+        next: (filmeAtualizado) => {
+          console.log('Filme curtido:', filmeAtualizado);
+          this.filme$ = of(filmeAtualizado);
+        },
+        error: (error) => console.error('Erro ao curtir filme:', error)
+      });
+    } else {
+      console.error('ID do filme indefinido');
+    }
+  }
+
 }

@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { first, Observable, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 
 export interface Filme {
-trailerUrl: any;
-  id?: string;
+  id: number;
   titulo: string;
   sinopse: string;
   elenco: string;
@@ -13,39 +13,64 @@ trailerUrl: any;
   classificacao: string;
   genero: string;
   imageUrl?: string;
-}
+  trailerUrl: string;
+  curtidas: number; }
 
 @Injectable({
-
   providedIn: 'root'
 })
 export class FilmeService {
-  getFilme(arg0: any) {
+  buscarFilmes() {
     throw new Error('Method not implemented.');
   }
   private filmes: Filme[] = [];
-  private readonly API = 'api/filmes';
+  private readonly API = 'http://localhost:8080/api/filmes';
 
   constructor(private readonly httpClient: HttpClient) {
-   this.buscarFimes().subscribe({
-    next: (f) => this.filmes = f,
-    error: (e) => console.error('Error ao buscar filmes:', e)
-   })
+    this.carregarFilmes();
+  }
+
+  private carregarFilmes(): void {
+    this.buscarFimes().subscribe({
+      next: (f) => (this.filmes = f),
+      error: (e) => console.error('Erro ao carregar filmes:', e)
+    });
   }
 
   buscarFimes(): Observable<Filme[]> {
-    return this.httpClient.get<Filme[]> (this.API).pipe(
-      first()
+    console.log('Chamando buscarFimes');
+    return this.httpClient.get<Filme[]>(this.API).pipe(
+        tap(filmes => console.log('Filmes recebidos:', filmes)),
+        catchError(error => {
+            console.error('Erro ao buscar filmes:', error);
+            return of([]);
+        })
     );
-  }
+}
 
   buscarFilmePorId(id: number): Observable<Filme> {
-    return this.httpClient.get<Filme> (`${this.API}/${id}`).pipe(
-      first()
+    return this.httpClient.get<Filme>(`${this.API}/${id}`).pipe(
+      catchError(error => {
+        console.error('Erro ao buscar filme por ID:', error);
+        return of({} as Filme);
+      })
     );
   }
 
-
+  curtirFilme(id: number): Observable<Filme> {
+    return this.httpClient.post<Filme>(`${this.API}/${id}/curtir`, {}).pipe(
+      tap(filmeAtualizado => {
+        const index = this.filmes.findIndex(f => f.id === id);
+        if (index !== -1) {
+          this.filmes[index] = filmeAtualizado;
+        }
+      }),
+      catchError(error => {
+        console.error('Erro ao curtir filme:', error);
+        return of({} as Filme);
+      })
+    );
+  }
 
   getFilmes(): Observable<Filme[]> {
     return of(this.filmes);
@@ -70,6 +95,7 @@ export class FilmeService {
         filme.genero.toLowerCase() === genero.toLowerCase()
       );
     }
+
     return of(filteredFilmes);
   }
 
@@ -82,17 +108,11 @@ export class FilmeService {
     }
     if (query.trim()) {
       const lowerQuery = query.toLowerCase();
-
       filteredFilmes = filteredFilmes.filter(filme =>
         filme.titulo.toLowerCase().includes(lowerQuery) ||
         filme.genero.toLowerCase().includes(lowerQuery)
       );
     }
-
-    if(genero){
-      filteredFilmes = filteredFilmes.filter(filme => filme.genero.toLowerCase() === genero.toLowerCase());
-    }
-
     return of(filteredFilmes);
   }
 }

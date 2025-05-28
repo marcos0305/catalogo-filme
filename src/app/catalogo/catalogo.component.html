@@ -2,12 +2,12 @@
   <h1 class="titulo-catalogo">🎬 Catálogo de Filmes</h1>
   <div class="search-bar">
     <input
-      type="text" [(ngModel)]="query"
+      type="text"
+      [(ngModel)]="query"
       (ngModelChange)="buscarFilmes()"
       placeholder="Pesquisar por nome ou gênero..."
       (keyup.enter)="buscarFilmes()"
-      />
-
+    />
 
     <select id="genero" [(ngModel)]="genero" (change)="filtrarFilmes()">
       <option value="">Todos</option>
@@ -18,6 +18,11 @@
 
     <button (click)="buscarFilmes()">Buscar</button>
 
+    <label for="sortCriteria">Ordenar por:</label>
+    <select id="sortCriteria" [(ngModel)]="sortCriteria" (ngModelChange)="setSortCriteria(sortCriteria)">
+      <option value="titulo">Nome</option>
+      <option value="curtidas">Curtidas</option>
+    </select>
   </div>
 
   <div class="filmes-list" *ngIf="filmes$ | async as filmes">
@@ -25,17 +30,12 @@
       <p>Nenhum filme encontrado.</p>
     </div>
     <ng-template #filmesList>
-
-
       <div *ngFor="let filme of filmes" class="filme-card">
         <a [routerLink]="['/catalogo', filme.id]">
           <img [src]="filme.imageUrl" alt="{{ filme.titulo }}" />
         </a>
         <h3>{{ filme.titulo }}</h3>
       </div>
-
-
     </ng-template>
-
   </div>
 </div>
