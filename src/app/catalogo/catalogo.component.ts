@@ -20,6 +20,7 @@ export class CatalogoComponent implements OnInit, OnDestroy {
   genero: string = '';
   subscription = new Subscription();
   sortCriteria: 'titulo' | 'curtidas' = 'titulo';
+  private isLoading = false;
 
   constructor(private filmeService: FilmeService) {
     this.sortCriteria = (localStorage.getItem('sortCriteria') as 'titulo' | 'curtidas') || 'titulo';
@@ -31,34 +32,45 @@ export class CatalogoComponent implements OnInit, OnDestroy {
   }
 
   carregarFilmes(): void {
-    this.filmes$ = this.filmeService.buscarFimes().pipe(
+    if (this.isLoading) return;
+    this.isLoading = true;
+    console.log('Iniciando carregamento de filmes...');
+    this.filmes$ = this.filmeService.buscarFilmes().pipe(
       tap(filmes => console.log('Filmes carregados:', filmes)),
-      map(filmes => this.sortFilmes(filmes))
+      map(filmes => this.filtrarESortearFilmes(filmes)),
+      tap(() => this.isLoading = false)
     );
   }
 
   buscarFilmes(): void {
+    if (this.isLoading) return;
     if (this.query.trim()) {
       this.filmes$ = this.filmeService.searchFilmes(this.query).pipe(
-        map(filmes => this.sortFilmes(filmes))
+        map(filmes => this.filtrarESortearFilmes(filmes))
       );
     } else {
-      this.filmes$ = this.filmeService.getFilmes().pipe(
-        map(filmes => this.sortFilmes(filmes))
-      );
+      this.carregarFilmes();
     }
-    this.filtrarFilmes();
   }
 
   filtrarFilmes(): void {
+    if (this.isLoading) return;
     this.filmes$ = this.filmeService.filterFilmes(this.genero, 0).pipe(
-      map(filmes => this.sortFilmes(filmes))
+      map(filmes => this.filtrarESortearFilmes(filmes))
     );
     if (this.query.trim()) {
       this.filmes$ = this.filmeService.searchFilmesWithFilter(this.query, this.genero).pipe(
-        map(filmes => this.sortFilmes(filmes))
+        map(filmes => this.filtrarESortearFilmes(filmes))
       );
     }
+  }
+
+  filtrarESortearFilmes(filmes: Filme[]): Filme[] {
+    let resultado = [...filmes];
+    if (this.genero) {
+      resultado = resultado.filter(filme => filme.genero === this.genero);
+    }
+    return this.sortFilmes(resultado);
   }
 
   sortFilmes(filmes: Filme[]): Filme[] {

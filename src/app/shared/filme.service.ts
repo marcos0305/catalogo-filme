@@ -1,118 +1,51 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
+// Definir e exportar a interface Filme
 export interface Filme {
+imageUrl: any;
   id: number;
   titulo: string;
   sinopse: string;
   elenco: string;
   diretor: string;
   duracao: string;
-  classificacao: string;
   genero: string;
-  imageUrl?: string;
-  trailerUrl: string;
-  curtidas: number; }
+  classificacao: string;
+  trailerUrl?: string;
+  curtidas?: number;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class FilmeService {
-  buscarFilmes() {
-    throw new Error('Method not implemented.');
-  }
-  private filmes: Filme[] = [];
-  private readonly API = 'http://localhost:8080/api/filmes';
+  private apiUrl = 'http://localhost:8080/api/filmes';
 
-  constructor(private readonly httpClient: HttpClient) {
-    this.carregarFilmes();
-  }
+  constructor(private http: HttpClient) {}
 
-  private carregarFilmes(): void {
-    this.buscarFimes().subscribe({
-      next: (f) => (this.filmes = f),
-      error: (e) => console.error('Erro ao carregar filmes:', e)
-    });
-  }
-
-  buscarFimes(): Observable<Filme[]> {
-    console.log('Chamando buscarFimes');
-    return this.httpClient.get<Filme[]>(this.API).pipe(
-        tap(filmes => console.log('Filmes recebidos:', filmes)),
-        catchError(error => {
-            console.error('Erro ao buscar filmes:', error);
-            return of([]);
-        })
-    );
-}
-
-  buscarFilmePorId(id: number): Observable<Filme> {
-    return this.httpClient.get<Filme>(`${this.API}/${id}`).pipe(
-      catchError(error => {
-        console.error('Erro ao buscar filme por ID:', error);
-        return of({} as Filme);
-      })
-    );
-  }
-
-  curtirFilme(id: number): Observable<Filme> {
-    return this.httpClient.post<Filme>(`${this.API}/${id}/curtir`, {}).pipe(
-      tap(filmeAtualizado => {
-        const index = this.filmes.findIndex(f => f.id === id);
-        if (index !== -1) {
-          this.filmes[index] = filmeAtualizado;
-        }
-      }),
-      catchError(error => {
-        console.error('Erro ao curtir filme:', error);
-        return of({} as Filme);
-      })
-    );
-  }
-
-  getFilmes(): Observable<Filme[]> {
-    return of(this.filmes);
+  buscarFilmes(): Observable<Filme[]> {
+    return this.http.get<Filme[]>(this.apiUrl);
   }
 
   searchFilmes(query: string): Observable<Filme[]> {
-    if (!query.trim()) {
-      return this.getFilmes();
-    }
-    const lowerQuery = query.toLowerCase();
-    const filteredFilmes = this.filmes.filter(filme =>
-      filme.titulo.toLowerCase().includes(lowerQuery) ||
-      filme.genero.toLowerCase().includes(lowerQuery)
-    );
-    return of(filteredFilmes);
+    return this.http.get<Filme[]>(`${this.apiUrl}/search?query=${query}`);
   }
 
-  filterFilmes(genero: string, notaMinima: number): Observable<Filme[]> {
-    let filteredFilmes = this.filmes;
-    if (genero) {
-      filteredFilmes = filteredFilmes.filter(filme =>
-        filme.genero.toLowerCase() === genero.toLowerCase()
-      );
-    }
-
-    return of(filteredFilmes);
+  filterFilmes(genero: string, classificacao: number): Observable<Filme[]> {
+    return this.http.get<Filme[]>(`${this.apiUrl}/filter?genero=${genero}&classificacao=${classificacao}`);
   }
 
   searchFilmesWithFilter(query: string, genero: string): Observable<Filme[]> {
-    let filteredFilmes = this.filmes;
-    if (genero) {
-      filteredFilmes = filteredFilmes.filter(filme =>
-        filme.genero.toLowerCase() === genero.toLowerCase()
-      );
-    }
-    if (query.trim()) {
-      const lowerQuery = query.toLowerCase();
-      filteredFilmes = filteredFilmes.filter(filme =>
-        filme.titulo.toLowerCase().includes(lowerQuery) ||
-        filme.genero.toLowerCase().includes(lowerQuery)
-      );
-    }
-    return of(filteredFilmes);
+    return this.http.get<Filme[]>(`${this.apiUrl}/search?query=${query}&genero=${genero}`);
+  }
+
+  buscarFilmePorId(id: number): Observable<Filme | undefined> {
+    return this.http.get<Filme>(`${this.apiUrl}/${id}`);
+  }
+
+  curtirFilme(id: number): Observable<Filme> {
+    return this.http.post<Filme>(`${this.apiUrl}/${id}/curtir`, {});
   }
 }

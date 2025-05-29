@@ -42,6 +42,13 @@
   color: #000;
 }
 
+.button-group {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
 .filme-info .voltar-button,
 .filme-info button {
   display: inline-block;
@@ -82,5 +89,10 @@
 
   .filme-info h2 {
     font-size: 20px;
+  }
+
+  .button-group {
+    flex-direction: column;
+    align-items: center;
   }
 }

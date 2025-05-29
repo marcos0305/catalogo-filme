@@ -1,4 +1,5 @@
 export interface Filme {
+  curtidas: number;
   id?: string;
   titulo: string;
   sinopse: string;
