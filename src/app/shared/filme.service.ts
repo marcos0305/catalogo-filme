@@ -2,9 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-// Definir e exportar a interface Filme
 export interface Filme {
-imageUrl: any;
+  imageUrl: any;
   id: number;
   titulo: string;
   sinopse: string;
@@ -15,6 +14,7 @@ imageUrl: any;
   classificacao: string;
   trailerUrl?: string;
   curtidas?: number;
+  dataLancamento?: string;
 }
 
 @Injectable({
@@ -30,7 +30,7 @@ export class FilmeService {
   }
 
   searchFilmes(query: string): Observable<Filme[]> {
-    return this.http.get<Filme[]>(`${this.apiUrl}/search?query=${query}`);
+    return this.http.get<Filme[]>(`${this.apiUrl}/search?term=${query}`);
   }
 
   filterFilmes(genero: string, classificacao: number): Observable<Filme[]> {
@@ -38,7 +38,7 @@ export class FilmeService {
   }
 
   searchFilmesWithFilter(query: string, genero: string): Observable<Filme[]> {
-    return this.http.get<Filme[]>(`${this.apiUrl}/search?query=${query}&genero=${genero}`);
+    return this.http.get<Filme[]>(`${this.apiUrl}/search?term=${query}&genero=${genero}`);
   }
 
   buscarFilmePorId(id: number): Observable<Filme | undefined> {

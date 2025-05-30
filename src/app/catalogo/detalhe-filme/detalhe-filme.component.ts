@@ -38,7 +38,7 @@ export class DetalheFilmeComponent implements OnInit {
         return this.filmeService.buscarFilmePorId(Number(id));
       })
     );
-    this.viewCount++; // Incrementa visualizações ao carregar
+    this.viewCount++; 
   }
 
   voltar(): void {
@@ -61,15 +61,12 @@ export class DetalheFilmeComponent implements OnInit {
 
   toggleDetails(): void {
     console.log('Card clicado!');
-    // Você pode adicionar lógica aqui se desejar
   }
 
   onMouseEnter(): void {
-    // Animação ao passar o mouse (estilizada no CSS)
   }
 
   onMouseLeave(): void {
-    // Reseta animação ao sair
   }
 
   showExtraDetail(): void {

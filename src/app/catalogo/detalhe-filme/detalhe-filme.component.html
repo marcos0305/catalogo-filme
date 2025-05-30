@@ -15,11 +15,12 @@
       <p *ngIf="extraDetail" class="extra-detail">Citação: "{{getRandomQuote()}}" - Extraído do filme!</p>
       <p><strong>Sinopse:</strong> {{ filme.sinopse }}</p>
       <p><strong>Elenco:</strong> {{ filme.elenco }}</p>
+      <p><strong>Ano de Lançamento:</strong> {{filme.dataLancamento ? (filme.dataLancamento | slice:0:4) : 'Data não disponivel' }} </p>
       <p><strong>Diretor:</strong> {{ filme.diretor }}</p>
       <p><strong>Duração:</strong> {{ filme.duracao }}</p>
       <p><strong>Gênero:</strong> {{ filme.genero }}</p>
       <p><strong>Classificação:</strong> {{ filme.classificacao }}</p>
-      <p><strong>Visualizações:</strong> {{ getViewCount() }}</p>
+
       <div class="button-group">
         <button class="curtir-button" (click)="curtirFilme(filme.id); $event.stopPropagation()">
           <span class="curtir-icon">👍</span>
