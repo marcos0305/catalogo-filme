@@ -21,6 +21,9 @@ export interface Filme {
   providedIn: 'root'
 })
 export class FilmeService {
+  getFilmes() {
+    throw new Error('Method not implemented.');
+  }
   private apiUrl = 'http://localhost:8080/api/filmes';
 
   constructor(private http: HttpClient) {}

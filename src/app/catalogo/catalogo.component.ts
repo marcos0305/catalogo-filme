@@ -1,8 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, Inject, PLATFORM_ID } from '@angular/core';
 import { FilmeService, Filme } from '../shared/filme.service';
 import { map, Observable, of, Subscription, tap } from 'rxjs';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterLink, RouterModule } from '@angular/router';
 
@@ -15,17 +15,28 @@ import { RouterLink, RouterModule } from '@angular/router';
 })
 export class CatalogoComponent implements OnInit, OnDestroy {
   menuAberto: any;
-  filmes$: Observable<Filme[]>;
+  filmes$: Observable<Filme[]> | undefined;
   query: string = '';
   genero: string = '';
   subscription = new Subscription();
-  sortCriteria: 'titulo' | 'curtidas' = 'titulo';
+  sortCriteria: 'titulo' | 'curtidas'| 'recentes' = 'titulo';
   private isLoading = false;
 
-  constructor(private filmeService: FilmeService) {
-    this.sortCriteria = (localStorage.getItem('sortCriteria') as 'titulo' | 'curtidas') || 'titulo';
-    this.filmes$ = of([]);
+  constructor(
+  private filmeService: FilmeService,
+  private cdr: ChangeDetectorRef,
+  @Inject(PLATFORM_ID) private platformId: Object
+) {
+  this.sortCriteria = 'recentes';
+  if (isPlatformBrowser(this.platformId)) {
+    this.loadSortCriteriaFromLocalStorage();
   }
+}
+
+private loadSortCriteriaFromLocalStorage(): void {
+  const savedCriteria = localStorage.getItem('sortCriteria') as 'titulo' | 'curtidas' | 'recentes';
+  this.sortCriteria = savedCriteria || 'recentes';
+}
 
   ngOnInit(): void {
     this.carregarFilmes();
@@ -54,16 +65,17 @@ export class CatalogoComponent implements OnInit, OnDestroy {
   }
 
   filtrarFilmes(): void {
-    if (this.isLoading) return;
+  if (this.isLoading) return
+  if (this.query.trim()) {
+    this.filmes$ = this.filmeService.searchFilmesWithFilter(this.query, this.genero).pipe(
+      map(filmes => this.filtrarESortearFilmes(filmes))
+    );
+  } else {
     this.filmes$ = this.filmeService.filterFilmes(this.genero, 0).pipe(
       map(filmes => this.filtrarESortearFilmes(filmes))
     );
-    if (this.query.trim()) {
-      this.filmes$ = this.filmeService.searchFilmesWithFilter(this.query, this.genero).pipe(
-        map(filmes => this.filtrarESortearFilmes(filmes))
-      );
-    }
   }
+}
 
   filtrarESortearFilmes(filmes: Filme[]): Filme[] {
     let resultado = [...filmes];
@@ -74,21 +86,28 @@ export class CatalogoComponent implements OnInit, OnDestroy {
   }
 
   sortFilmes(filmes: Filme[]): Filme[] {
-    return [...filmes].sort((a, b) => {
-      if (this.sortCriteria === 'titulo') {
-        return a.titulo.localeCompare(b.titulo);
-      } else if (this.sortCriteria === 'curtidas') {
-        return (b.curtidas || 0) - (a.curtidas || 0);
-      }
-      return 0;
-    });
-  }
+  return [...filmes].sort((a, b) => {
+    if (this.sortCriteria === 'titulo') {
+      return a.titulo.localeCompare(b.titulo);
+    } else if (this.sortCriteria === 'curtidas') {
+      return (b.curtidas || 0) - (a.curtidas || 0);
+    } else if (this.sortCriteria === 'recentes') {
+      const anoA = a.dataLancamento ? parseInt(a.dataLancamento.slice(0, 4)) : 0;
+      const anoB = b.dataLancamento ? parseInt(b.dataLancamento.slice(0, 4)) : 0;
+      return anoB - anoA;
+    }
+    return 0;
+  });
+}
 
-  setSortCriteria(criteria: 'titulo' | 'curtidas'): void {
-    this.sortCriteria = criteria;
+ setSortCriteria(criteria: 'titulo' | 'curtidas' | 'recentes'): void {
+  console.log('Ordenação alterada para:', criteria);
+  this.sortCriteria = criteria;
+  if (isPlatformBrowser(this.platformId)) {
     localStorage.setItem('sortCriteria', criteria);
-    this.carregarFilmes();
   }
+  this.carregarFilmes();
+}
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();

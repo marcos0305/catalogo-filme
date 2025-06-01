@@ -12,22 +12,22 @@
       (keyup.enter)="buscarFilmes()"
     />
 
-    <select id="genero" [(ngModel)]="genero" (change)="filtrarFilmes()">
-      <option value="">Todos</option>
-      <option value="Ação">Ação</option>
-      <option value="Comédia">Comédia</option>
-      <option value="Drama">Drama</option>
-      <option value="Terror">Terror</option>
+    <select id="genero" [(ngModel)]="genero" (ngModelChange)="filtrarFilmes()">
+        <option value="">Todos</option>
+        <option value="Ação">Ação</option>
+        <option value="Comédia">Comédia</option>
+        <option value="Drama">Drama</option>
+        <option value="Terror">Terror</option>
+    </select>
+
+    <select id="sortCriteria" [(ngModel)]="sortCriteria" (ngModelChange)="setSortCriteria(sortCriteria)">
+      <option value="titulo">Nome</option>
+      <option value="curtidas">Curtidas</option>
+      <option value="recentes">Recentes</option>
     </select>
 
     <button (click)="buscarFilmes()">Buscar</button>
 
-    <label for="sortCriteria">Ordenar por:</label>
-    <select id="sortCriteria" [(ngModel)]="sortCriteria" (ngModelChange)="setSortCriteria(sortCriteria)">
-      <option value="titulo">Nome</option>
-      <option value="curtidas">Curtidas</option>
-      <option value="datalacamento">Data de Lançamento</option>
-    </select>
   </div>
 
   <div class="filmes-list" *ngIf="filmes$ | async as filmes">
