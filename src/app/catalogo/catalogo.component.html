@@ -1,35 +1,33 @@
-<div class="catalogo-container">
+<div class="catalogo-container" [ngClass]="{'claro': theme === 'claro', 'escuro': theme === 'escuro'}">
   <div class="header">
-  <h1 class="titulo-catalogo">🎬 Catálogo de Filmes</h1>
-  <a class="sobre-link" [routerLink]="['/sobre']">Sobre o Site</a>
+    <h1 class="titulo-catalogo">
+      <span>Catálogo de Filmes</span>
+    </h1>
+    <div class="header-actions">
+      <a class="sobre-link" routerLink="/sobre">Sobre</a>
+      <button class="theme-toggle" (click)="toggleTheme()">
+        {{ theme === 'claro' ? 'Tema Escuro' : 'Tema Claro' }}
+      </button>
+    </div>
   </div>
+
   <div class="search-bar">
-    <input
-      type="text"
-      [(ngModel)]="query"
-      (ngModelChange)="buscarFilmes()"
-      placeholder="Pesquisar por nome ou gênero..."
-      (keyup.enter)="buscarFilmes()"
-    />
-
+    <input type="text" placeholder="Buscar filmes..." [(ngModel)]="query" (input)="buscarFilmes()" />
     <select id="genero" [(ngModel)]="genero" (ngModelChange)="filtrarFilmes()">
-        <option value="">Todos</option>
-        <option value="Ação">Ação</option>
-        <option value="Comédia">Comédia</option>
-        <option value="Drama">Drama</option>
-        <option value="Terror">Terror</option>
+      <option value="">Todos</option>
+      <option value="Ação">Ação</option>
+      <option value="Aventura">Aventura</option>
+      <option value="Comédia">Comédia</option>
+      <option value="Drama">Drama</option>
+      <option value="Fantasia">Fantasia</option>
+      <option value="Terror">Terror</option>
     </select>
-
     <select id="sortCriteria" [(ngModel)]="sortCriteria" (ngModelChange)="setSortCriteria(sortCriteria)">
       <option value="titulo">Nome</option>
       <option value="curtidas">Curtidas</option>
       <option value="recentes">Recentes</option>
     </select>
-
-    <button (click)="buscarFilmes()">Buscar</button>
-
   </div>
-
   <div class="filmes-list" *ngIf="filmes$ | async as filmes">
     <div *ngIf="filmes.length === 0; else filmesList">
       <p>Nenhum filme encontrado.</p>

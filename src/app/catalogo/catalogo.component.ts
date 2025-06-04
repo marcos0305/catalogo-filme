@@ -21,6 +21,7 @@ export class CatalogoComponent implements OnInit, OnDestroy {
   subscription = new Subscription();
   sortCriteria: 'titulo' | 'curtidas'| 'recentes' = 'titulo';
   private isLoading = false;
+  theme: 'claro'| 'escuro' = 'claro';
 
   constructor(
   private filmeService: FilmeService,
@@ -30,17 +31,37 @@ export class CatalogoComponent implements OnInit, OnDestroy {
   this.sortCriteria = 'recentes';
   if (isPlatformBrowser(this.platformId)) {
     this.loadSortCriteriaFromLocalStorage();
+    this.loadThemeFromLocalStorage();
   }
-}
-
-private loadSortCriteriaFromLocalStorage(): void {
-  const savedCriteria = localStorage.getItem('sortCriteria') as 'titulo' | 'curtidas' | 'recentes';
-  this.sortCriteria = savedCriteria || 'recentes';
 }
 
   ngOnInit(): void {
     this.carregarFilmes();
   }
+
+  // Método para carregar o tema do localStorage
+  private loadThemeFromLocalStorage(): void {
+    const savedTheme = localStorage.getItem('theme') as 'claro' | 'escuro';
+    this.theme = savedTheme || 'claro';
+    console.log('Tema carregado do localStorage:', this.theme);
+  }
+
+  // Método para alternar o tema
+  toggleTheme(): void {
+    this.theme = this.theme === 'claro' ? 'escuro' : 'claro';
+    console.log('Tema alterado para:', this.theme);
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('theme', this.theme);
+    }
+    this.cdr.detectChanges(); // Força a atualização da view
+  }
+
+
+
+  private loadSortCriteriaFromLocalStorage(): void {
+  const savedCriteria = localStorage.getItem('sortCriteria') as 'titulo' | 'curtidas' | 'recentes';
+  this.sortCriteria = savedCriteria || 'recentes';
+}
 
   carregarFilmes(): void {
     if (this.isLoading) return;
