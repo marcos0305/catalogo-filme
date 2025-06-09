@@ -1,1 +1,9 @@
-/* You can add global styles to this file, and also import other style files */
+body.claro {
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  color: #212529;
+}
+
+body.escuro {
+  background: #000000;
+  color: #ecf0f1;
+}

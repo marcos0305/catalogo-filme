@@ -71,6 +71,21 @@
   animation: fadeInText 0.5s ease-in-out;
 }
 
+.theme-toggle {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.theme-toggle:hover {
+  background-color: #0056b3;
+}
+
 .button-group {
   display: flex;
   flex-direction: column;
@@ -80,7 +95,8 @@
 
 .filme-info .voltar-button,
 .filme-info .curtir-button,
-.filme-info .recomendar-button {
+.filme-info .recomendar-button,
+.filme-info .theme-toggle {
   padding: 12px 24px;
   margin-top: 0;
   font-size: 16px;
@@ -109,9 +125,15 @@
   color: white;
 }
 
+.filme-info .theme-toggle {
+  background-color: #343a40;
+  color: white;
+}
+
 .filme-info .voltar-button:hover,
 .filme-info .curtir-button:hover,
-.filme-info .recomendar-button:hover {
+.filme-info .recomendar-button:hover,
+.filme-info .theme-toggle:hover {
   transform: translateY(-2px);
   box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
 }
@@ -124,13 +146,19 @@
   background-color: #138496;
 }
 
+.filme-info .theme-toggle:hover {
+  background-color: #23272b;
+}
+
 .filme-info .curtir-button:active,
-.filme-info .recomendar-button:active {
+.filme-info .recomendar-button:active,
+.filme-info .theme-toggle:active {
   transform: scale(0.95) translateY(0);
 }
 
 .curtir-icon,
-.recomendar-icon {
+.recomendar-icon,
+.theme-icon {
   margin-right: 8px;
   font-size: 18px;
   transition: transform 0.2s ease;
@@ -151,7 +179,8 @@
   transform: scale(1.2);
 }
 
-.recomendar-button:hover .recomendar-icon {
+.recomendar-button:hover .recomendar-icon,
+.theme-toggle:hover .theme-icon {
   transform: scale(1.2);
 }
 
@@ -168,68 +197,78 @@
 }
 
 .recommendation-link {
-  color: #007bff; /* Cor base do link */
-  text-decoration: none; /* Remove sublinhado padrão */
-  padding: 4px 8px; /* Espaçamento interno */
-  border-radius: 4px; /* Bordas arredondadas */
-  transition: all 0.3s ease; /* Transição suave */
+  color: #007bff;
+  text-decoration: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
 }
 
 .recommendation-link:hover {
-  background-color: #007bff; /* Cor de fundo no hover */
-  color: #ffffff; /* Texto branco no hover */
-  text-decoration: underline; /* Sublinhado no hover */
-  transform: translateY(-1px); /* Efeito de elevação */
+  background-color: #007bff;
+  color: #ffffff;
+  text-decoration: underline;
+  transform: translateY(-1px);
 }
 
 .recommendations p {
   margin: 5px 0;
 }
 
-@media (max-width: 768px) {
-  .detalhe-filme-container {
-    padding: 20px;
-  }
-
-  .filme-card iframe {
-    height: 250px;
-  }
-
-  .filme-info h2 {
-    font-size: 22px;
-  }
-
-  .filme-info p {
-    font-size: 14px;
-  }
-
-  .filme-info .voltar-button,
-  .filme-info .curtir-button,
-  .filme-info .recomendar-button {
-    padding: 10px 18px;
-    font-size: 14px;
-  }
-
-  .curtir-count {
-    font-size: 14px;
-  }
-
-  .recommendation-link {
-    padding: 2px 6px; /* Ajuste para telas menores */
-  }
+.filme-card.claro {
+  background-color: #ffffff;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+.filme-card.claro .filme-info h2 {
+  color: #212529;
 }
 
-@keyframes fadeInText {
-  from { opacity: 0; }
-  to { opacity: 1; }
+.filme-card.claro .filme-info h2:hover {
+  color: #007bff;
 }
 
-@keyframes slideIn {
-  from { transform: translateY(10px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+.filme-card.claro .filme-info p {
+  color: #495057;
+}
+
+.filme-card.claro .filme-info p strong {
+  color: #000;
+}
+
+.filme-card.claro .extra-detail {
+  color: #6c757d;
+}
+
+.filme-card.claro .recommendations {
+  background-color: #f8f9fa;
+}
+
+.filme-card.escuro {
+  background-color: #2c3e50;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.filme-card.escuro .filme-info h2 {
+  color: #ecf0f1;
+}
+
+.filme-card.escuro .filme-info h2:hover {
+  color: #3498db;
+}
+
+.filme-card.escuro .filme-info p {
+  color: #bdc3c7;
+}
+
+.filme-card.escuro .filme-info p strong {
+  color: #ecf0f1;
+}
+
+.filme-card.escuro .extra-detail {
+  color: #7f8c8d;
+}
+
+.filme-card.escuro .recommendations {
+  background-color: #34495e;
 }

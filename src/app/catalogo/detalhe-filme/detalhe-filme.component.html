@@ -1,5 +1,5 @@
 <div *ngIf="filme$ | async as filme" class="detalhe-filme-container">
-  <div class="filme-card" (click)="toggleDetails()" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
+  <div class="filme-card" [ngClass]="{'claro': theme === 'claro', 'escuro': theme === 'escuro'}" (click)="toggleDetails()" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
     @if (filme.trailerUrl) {
       <iframe
         [src]="filme.trailerUrl | safeUrl"
@@ -12,26 +12,29 @@
     }
     <div class="filme-info">
       <h2 class="titulo-filme" (click)="showExtraDetail()">{{ filme.titulo }}</h2>
-      <p *ngIf="extraDetail" class="extra-detail">Citação: "{{getRandomQuote()}}" - Extraído do filme!</p>
       <p><strong>Sinopse:</strong> {{ filme.sinopse }}</p>
       <p><strong>Elenco:</strong> {{ filme.elenco }}</p>
-      <p><strong>Ano de Lançamento:</strong> {{filme.dataLancamento ? (filme.dataLancamento | slice:0:4) : 'Data não disponivel' }} </p>
+      <p><strong>Ano de Lançamento:</strong> {{ filme.dataLancamento ? (filme.dataLancamento | slice:0:4) : 'Data não disponível' }}</p>
       <p><strong>Diretor:</strong> {{ filme.diretor }}</p>
       <p><strong>Duração:</strong> {{ filme.duracao }}</p>
       <p><strong>Gênero:</strong> {{ filme.genero }}</p>
       <p><strong>Classificação:</strong> {{ filme.classificacao }}</p>
 
       <div class="button-group">
-        <button class="curtir-button" (click)="curtirFilme(filme.id); $event.stopPropagation()">
-          <span class="curtir-icon">👍</span>
-          <span class="curtir-count">{{ filme.curtidas || 0 }}</span>
-          Curtir
-        </button>
-        <button class="voltar-button" (click)="voltar(); $event.stopPropagation()">← Voltar</button>
-        <button class="recomendar-button" (click)="showRecommendations(); $event.stopPropagation()">
-          <span class="recomendar-icon">🔍</span> Recomendações
-        </button>
-      </div>
+  <button class="curtir-button" (click)="curtirFilme(filme.id); $event.stopPropagation()">
+    <span class="curtir-icon">👍</span>
+    <span class="curtir-count">{{ filme.curtidas || 0 }}</span>
+    Curtir
+  </button>
+  <button class="voltar-button" (click)="voltar(); $event.stopPropagation()">← Voltar</button>
+  <button class="recomendar-button" (click)="showRecommendations(); $event.stopPropagation()">
+    <span class="recomendar-icon">🔍</span> Recomendações
+  </button>
+  <button class="theme-toggle" (click)="toggleTheme(); $event.stopPropagation()">
+    {{ theme === 'claro' ? 'Tema Escuro' : 'Tema Claro' }}
+  </button>
+</div>
+
       <div *ngIf="recommendationsVisible" class="recommendations">
         <p *ngIf="recommendedMovies.length === 0">Nenhum filme disponível para recomendação.</p>
         <p *ngIf="recommendedMovies.length > 0">
