@@ -1,7 +1,9 @@
 <div class="catalogo-container" [ngClass]="{'claro': theme === 'claro', 'escuro': theme === 'escuro'}">
   <div class="header">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
     <h1 class="titulo-catalogo">
-      <span>Catálogo de Filmes</span>
+      <span> 🎬 Catálogo de Filmes</span>
+      <span class="tagline">Explore os Melhores Filmes</span>
     </h1>
     <div class="header-actions">
       <a class="sobre-link" routerLink="/sobre">Sobre</a>
@@ -12,6 +14,7 @@
   </div>
 
   <div class="search-bar">
+
     <input type="text" placeholder="Buscar filmes..." [(ngModel)]="query" (input)="buscarFilmes()" />
 
     <select id="genero" [(ngModel)]="genero" (ngModelChange)="filtrarFilmes()">
@@ -30,6 +33,7 @@
 
     <button class="search-button" (click)="buscarFilmes()">Buscar</button>
   </div>
+
   <div class="filmes-list" *ngIf="filmes$ | async as filmes">
     <div *ngIf="filmes.length === 0; else filmesList">
       <p>Nenhum filme encontrado.</p>
@@ -43,4 +47,7 @@
       </div>
     </ng-template>
   </div>
+
+  <button class="back-to-top" (click)="scrollToTop()">Voltar ao topo</button>
+
 </div>

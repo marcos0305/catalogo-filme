@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, Inject, PLATFORM_ID, HostListener } from '@angular/core';
 import { FilmeService, Filme } from '../shared/filme.service';
 import { map, Observable, of, Subscription, tap } from 'rxjs';
 import { FormsModule } from '@angular/forms';
@@ -52,6 +52,7 @@ export class CatalogoComponent implements OnInit, OnDestroy {
     console.log('Tema alterado para:', this.theme);
     if (isPlatformBrowser(this.platformId)) {
       localStorage.setItem('theme', this.theme);
+      document.body.className = this.theme;
     }
     this.cdr.detectChanges(); // Força a atualização da view
   }
@@ -130,6 +131,24 @@ export class CatalogoComponent implements OnInit, OnDestroy {
   this.carregarFilmes();
 }
 
+@HostListener('window:scroll', [])
+  onWindowScroll() {
+    if (isPlatformBrowser(this.platformId)) {
+      const backToTopButton = document.querySelector('.back-to-top') as HTMLElement;
+      if (window.pageYOffset > 300) { // Aparece após rolar 300px
+        backToTopButton.classList.add('show');
+      } else {
+        backToTopButton.classList.remove('show');
+      }
+    }
+  }
+
+  // Volta ao topo
+  scrollToTop() {
+    if (isPlatformBrowser(this.platformId)) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
